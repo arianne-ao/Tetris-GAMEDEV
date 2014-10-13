@@ -55,9 +55,9 @@ public class GameFrame extends Game{
 
 	public void drawPiece(Graphics2D g, int[][] t){
 		g.setColor(Color.RED);
-		for(int e=temp.topleftY; e< t.length+temp.topleftY; e++){
-			for(int d=temp.topleftX; d< t[e-temp.topleftY].length+temp.topleftX; d++){
-				if(t[e-temp.topleftY][d-temp.topleftX] == 1){
+		for(int e=0; e< t.length; e++){
+			for(int d=0; d< t[e].length; d++){
+				if(t[e][d] == 1){
 					g.fillRect(d*SPACE+10, e*SPACE+10, SPACE, SPACE);
 					//temp.render(g, d*SPACE+10, e*SPACE+10);
 				}
