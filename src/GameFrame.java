@@ -7,25 +7,32 @@ import com.golden.gamedev.Game;
 
 public class GameFrame extends Game{
 
-	int [][] line = {{1,1,1,1},{0,0,0,0},{0,0,0,0},{0,0,0,0}}; 
+	int [][] iPiece = {{1,1,1,1},{0,0,0,0},{0,0,0,0},{0,0,0,0}}; 
+	int [][] tPiece = {{0,1,0,0},{1,1,1,0},{0,0,0,0},{0,0,0,0}};
+	int [][] oPiece = {{1,1,0,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}};
+	int [][] sPiece = {{0,1,1,0},{1,1,0,0},{0,0,0,0},{0,0,0,0}};
+	int [][] zPiece = {{1,1,0,0},{0,1,1,0},{0,0,0,0},{0,0,0,0}};
+	int [][] lPiece = {{1,0,0,0},{1,0,0,0},{1,1,0,0},{0,0,0,0}};
+	int [][] jPiece = {{0,1,0,0},{0,1,0,0},{1,1,0,0},{0,0,0,0}};
+	
 	private int [][] grid;
 	private final int SPACE = 24;
 	private final int OFFSET = 10;
 	private final int BUTTOM = 610;
-	//private tetrisPiece temp;
+	private tetrisPiece temp;
 	
 	@Override
 	public void initResources() {
 		grid = new int[20][25];
 		int[][] arr;
-		//temp = new tPiece();
-		/*arr = temp.nextRotation(1);
+		temp = new tetrisPiece(iPiece);
+		arr = temp.Rotation(lPiece);
 		for(int a = 0; a< arr.length;a++){
 			for(int b = 0; b<arr[a].length;b++){
 				System.out.print(arr[a][b]);
 			}
 			System.out.println();
-		}*/
+		}
 		
 	}
 
@@ -36,15 +43,7 @@ public class GameFrame extends Game{
 		g.setColor(Color.WHITE);
 		g.fillRect(0, 0, getWidth(), getHeight() );
 		drawGrid(g);
-		tetrisPiece temp = new tPiece();
 		
-		
-		//g.setColor(Color.BLUE);
-		//g.drawLine(0,BUTTOM, 100, BUTTOM);
-		//g.fillRect(2*SPACE+10, 5*SPACE+10, SPACE, SPACE);
-		
-		//temp.render(g, temp.topleftX, temp.topleftY);
-		drawPiece(g, temp.normalShape);
 
 	}
 
@@ -58,7 +57,7 @@ public class GameFrame extends Game{
 		for(int e=0; e< t.length; e++){
 			for(int d=0; d< t[e].length; d++){
 				if(t[e][d] == 1){
-					g.fillRect(d*SPACE+10, e*SPACE+10, SPACE, SPACE);
+					g.fillRect(d*SPACE + OFFSET, e*SPACE + OFFSET, SPACE, SPACE);
 					//temp.render(g, d*SPACE+10, e*SPACE+10);
 				}
 			}

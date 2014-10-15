@@ -1,9 +1,12 @@
 import java.awt.image.BufferedImage;
 
 
-public class tPiece extends tetrisPiece{
-/*	public int[][] normalShape;
-	public int[][] secondShape;
+public class tPiece{
+	/*================To be Removed==============*/
+	
+	
+	public int[][] normalShape;
+/*	public int[][] secondShape;
 	public int[][] thirdShape;
 	public int[][] forthShape;
 	public int rotation = 1;
@@ -16,7 +19,7 @@ public class tPiece extends tetrisPiece{
 									{0,0,0,0},
 									{0,0,0,0}};
 		
-		secondShape = new int [][] {{1,0,0,0},
+	/*	secondShape = new int [][] {{1,0,0,0},
 									{1,1,0,0},
 									{1,0,0,0},
 									{0,0,0,0}};
@@ -32,11 +35,29 @@ public class tPiece extends tetrisPiece{
 									{0,0,0,0}};
 		rotation = 1;
 		topleftX = 10;
-		topleftY = 10;
+		topleftY = 10;*/
 		
 	}
+	public int[][] Rotation(int[][] currentRotation){
+		/* Reference 
+			http://gamedev.stackexchange.com/questions/54299/tetris-rotations-using-linear-algebra-rotation-matrices
+		*/	
+		int [][] nextShape = new int [4][4];
+		int N = currentRotation.length;
+		for(int x = 0; x < N; x++){
+			for(int y = 0; y < N; y++ ){
+				nextShape[y][N-x-1] = currentRotation[x][y];
+				
+			}
+			
+		}
+		
+		
+		
+		return nextShape;
+	}
 	
-	@Override
+	/*@Override
 	public int[][] nextRotation(int currentRotation) {
 		int [][] nextShape = null;
 		
@@ -55,6 +76,6 @@ public class tPiece extends tetrisPiece{
 		}
 		return nextShape;
 		
-	}
+	}*/
 
 }
