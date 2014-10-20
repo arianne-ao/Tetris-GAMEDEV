@@ -157,11 +157,21 @@ public class GameFrame extends Game {
 //	
 	private void addPieceToGameField() {
 		System.out.println("add piece");
+		int newX = 0, newY = 0;
+
 		for (int i = 0; i < currentPiece.length; i++) {
 			for (int j = 0; j < currentPiece[i].length; j++) {
 				if(currentPiece[i][j] == 1 || currentPiece[i][j] == 2){
-					gameField[x_coor + i - x_padding][level + j - y_padding] = 1;
-					System.out.println((x_coor + i - x_padding)+" "+(level + j - y_padding));
+					newX = x_coor + i - x_padding;
+					newY = level + j - y_padding;
+					if((newX < COL_SIZE && newX >= 0) && (newY < ROW_SIZE && newY >= 0)){
+						gameField[x_coor + i - x_padding][level + j - y_padding] = 1;
+						System.out.println((x_coor + i - x_padding)+" "+(level + j - y_padding));
+					}
+					else{
+						System.out.println("Game Over");
+						gameOver();
+					}					
 				}
 			}
 		}
@@ -267,7 +277,7 @@ public class GameFrame extends Game {
 		}
 		else if(keyPressed(KeyEvent.VK_UP)){
 			rotate = true;
-			if(!isOutofWall(currentPiece, 0))
+			if(!isOutofWall(rotation(currentPiece), 0))
 				currentPiece = rotation(currentPiece);
 			System.out.println();
 			rotate = false;
@@ -451,6 +461,10 @@ public class GameFrame extends Game {
 		return false;
 
 	}
+	
+	private void gameOver() {
+		over = true;
+	}
 
 	private void generateNewPiece() {
 
@@ -484,7 +498,7 @@ public class GameFrame extends Game {
 		movePiece();
 		readInput();
 
-		if(!pause){
+		if(!pause && !over){
 			if(timer.action(l)){
 				checkPieceCollision(currentPiece);
 				if(pieceLanded){
