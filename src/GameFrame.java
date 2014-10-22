@@ -23,9 +23,11 @@ public class GameFrame extends Game {
 	Color T = Color.blue;
 	Color currentPieceColor, nextPieceColor;
 	
+	int Score, combo = 1;
 	
 	int[][] gameField;
 	int x_padding = 5, y_padding = 5;
+	int gameLevel = 1;
 	int level = 0;
 	int level_default = 0, x_coord_default = 6;
 	int x_coor = x_coord_default;
@@ -155,6 +157,64 @@ public class GameFrame extends Game {
 //		
 //	} 
 //	
+	private void clearLine(int lineNum){
+		for (int col = lineNum; col > 1; col--) {
+			for (int row = 0; row < 10; row++) {
+				gameField[row][col] = gameField[row][col-1];
+			}
+		}
+		
+			/*for (int x = lineNum; x < 1; x--) {
+				for(int y=0; y<gameField[x].length;y++){
+					gameField[x][y] = 0;
+				}
+				//gameField[x] = //gameField[x-1];
+			}*/
+		
+	}
+	
+	private void lineFull(){
+		//int index = -1;
+		int linesCleared = 0;
+		boolean fullLine = true;
+		for(int col = 0; col < 16;col++){
+			for(int row = 0; row<10 && fullLine; row++){
+				//assume line is full
+				if(gameField[row][col] != 1){
+					System.out.println("line not full");
+					fullLine = false;
+				}
+			
+			}//y
+			if(fullLine == true){
+				System.out.println("Line full " + "col: " + col   );
+				clearLine(col);
+				linesCleared++;
+				System.out.println("Lines Cleared: " + linesCleared);
+			}
+			
+			fullLine = true;
+		}//x
+		if(linesCleared == 0){
+			combo = 1;
+		}else if(linesCleared ==1){
+			Score += 100*gameLevel*combo;
+			combo++;
+		}else if(linesCleared==2){
+			Score += 200*gameLevel*combo;
+			combo++;
+		}else if(linesCleared == 3){
+			Score += 300*gameLevel*combo;
+			combo++;
+		}else {
+			Score += 500*gameLevel*combo;
+			combo++;
+		}
+		System.out.println("Score: "+ Score);
+		System.out.println("Combo: " + combo);
+	 
+	//return index;
+	}
 	private void addPieceToGameField() {
 		System.out.println("add piece");
 		int newX = 0, newY = 0;
@@ -497,12 +557,14 @@ public class GameFrame extends Game {
 		
 		movePiece();
 		readInput();
-
+		//lineFull();
 		if(!pause && !over){
 			if(timer.action(l)){
 				checkPieceCollision(currentPiece);
 				if(pieceLanded){
+					
 					addPieceToGameField();
+					lineFull();
 					generateNewPiece();
 				}
 				else{
