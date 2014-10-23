@@ -28,9 +28,10 @@ public class GameFrame extends Game {
 	int[][] gameField;
 	int x_padding = 5, y_padding = 5;
 	int gameLevel = 1;
-	int level = 0;
-	int level_default = 0, x_coord_default = 6;
+
+	int level_default = 2, x_coord_default = 6;
 	int x_coor = x_coord_default;
+	int level = level_default;
 	
 	boolean extremeMode = true;
 	
@@ -43,11 +44,15 @@ public class GameFrame extends Game {
 	int SLOT_SIZE = 10, SLOT_LENGTH = 5;
 	int SLOT_X = (x_padding - 3) * CELL_SIZE;
 	int SLOT_Y = y_padding * CELL_SIZE;
+	int MAX_STORE = 3;
 	
-	ArrayList<int[][]> storedPieces;
+//	ArrayList<int[][]> storedPieces;
+	ArrayList<Tetromino> storedPiecess;
 	
+
 	int[][] currentPiece, nextPiece;
-	int[][] o =  
+
+/*	int[][] o =  
 		{{0, 0, 0, 0, 0},
 	    {0, 0, 0, 0, 0},
 	    {0, 0, 2, 1, 0},
@@ -60,9 +65,6 @@ public class GameFrame extends Game {
 		    {0, 1, 2, 1, 1},
 		    {0, 0, 0, 0, 0},
 		    {0, 0, 0, 0, 0}};
-	
-	
-	
 	
 	int[][] l_left =  
 		{{0, 0, 0, 0, 0},
@@ -102,6 +104,14 @@ public class GameFrame extends Game {
 	    {0, 0, 2, 1, 0},
 	    {0, 0, 1, 0, 0},
 	    {0, 0, 0, 0, 0}};
+*/	
+
+
+	Tetromino ii = new t_shape();
+	Tetromino current_tetromino, next_tetromino;
+	
+	Tetromino storeSlot_1, storeSlot_2, storeSlot_3; 
+	
 	
 	public void initResources() {
 		
@@ -136,27 +146,32 @@ public class GameFrame extends Game {
 		over = false;
 		mainScreen = false;
 		
-		timer = new Timer(1000);
+		timer = new Timer(300);
 
 		
-		currentPiece = o;
+/*		currentPiece = o;
 		currentPieceColor = O;
 		nextPiece = t;
 		nextPieceColor = T;
-
-		storedPieces = new ArrayList<int[][]>();
-		storedPieces.add(o);
-		storedPieces.add(t);
-		storedPieces.add(i);
+*/
 		
+		
+//		storedPieces = new ArrayList<int[][]>();
+//		storedPieces.add(o);
+//		storedPieces.add(t);
+//		storedPieces.add(i);
+
+		storedPiecess = new ArrayList<Tetromino>();
+//		ii.setPiecePosition(t);
+		storedPiecess.add(storeSlot_1);
+		storedPiecess.add(storeSlot_2);
+		storedPiecess.add(storeSlot_3);
+			
+		current_tetromino = newPiece();
+		next_tetromino = newPiece();
 		
 	}
 	
-//	Color pieceColor(){
-//		
-//		
-//	} 
-//	
 	private void clearLine(int lineNum){
 		for (int col = lineNum; col > 1; col--) {
 			for (int row = 0; row < 10; row++) {
@@ -180,7 +195,7 @@ public class GameFrame extends Game {
 		for(int col = 0; col < 16;col++){
 			for(int row = 0; row<10 && fullLine; row++){
 				//assume line is full
-				if(gameField[row][col] != 1){
+				if(gameField[row][col] == 0){
 					System.out.println("line not full");
 					fullLine = false;
 				}
@@ -215,7 +230,8 @@ public class GameFrame extends Game {
 	 
 	//return index;
 	}
-	private void addPieceToGameField() {
+	
+	private void addPieceToGameField(int[][] currentPiece, int color_index) {
 		System.out.println("add piece");
 		int newX = 0, newY = 0;
 
@@ -225,7 +241,8 @@ public class GameFrame extends Game {
 					newX = x_coor + i - x_padding;
 					newY = level + j - y_padding;
 					if((newX < COL_SIZE && newX >= 0) && (newY < ROW_SIZE && newY >= 0)){
-						gameField[x_coor + i - x_padding][level + j - y_padding] = 1;
+//						gameField[x_coor + i - x_padding][level + j - y_padding] = 1;
+						gameField[x_coor + i - x_padding][level + j - y_padding] = color_index + 2;
 						System.out.println((x_coor + i - x_padding)+" "+(level + j - y_padding));
 					}
 					else{
@@ -237,6 +254,20 @@ public class GameFrame extends Game {
 		}
 		
 	}
+
+	
+	private void printGameField() {
+
+		
+		
+		for (int i = 0; i < ROW_SIZE-1; i++) {
+			for (int j = 0; j < COL_SIZE-1; j++) { 
+				System.out.print(gameField[j][i] + " ");				
+			}
+			System.out.println();
+		}
+	}
+	
 	
 	private void printPieceCoordinate() {
 		for (int i = 0; i < currentPiece.length; i++) {
@@ -286,12 +317,12 @@ public class GameFrame extends Game {
 	private void checkPieceCollision(int[][] piece) {
 		for (int i = 0; i < piece.length; i++) {
 			for (int j = 0; j < piece[i].length; j++) {
-				if(piece[i][j] > 0){
+				if(piece[i][j] == 1 || piece[i][j] == 2){
 					//if piece is inside the game field
 					if( isInsideGrid(i, j)){
 						// System.out.println("inside game field");
-						// System.out.println((x_coor + i - 5)+ " " +(level + j - 4));
-						if(gameField[x_coor + i - x_padding][level + j + 1 - y_padding] == 1){
+//						 System.out.println((x_coor + i - 5)+ " " +(level + j - 4));
+						if(gameField[x_coor + i - x_padding][level + j + 1 - y_padding] > 0){
 							// System.out.println("collied");
 							pieceLanded = true;
 							// System.out.println((x_coor + i - x_padding)+" "+(level + j + 1 - y_padding));
@@ -325,39 +356,88 @@ public class GameFrame extends Game {
 	}
 	
 	
-	private void movePiece() {
+//	private void movePiece() {
+//
+//		if(keyPressed(KeyEvent.VK_LEFT)){
+////			if(!isOutofWall(currentPiece, -1))
+//			if(!isOutofWall(current_tetromino.getPiecePosition(), -1))				
+//				x_coor--;
+//		}
+//		else if(keyPressed(KeyEvent.VK_RIGHT)){
+////			if(!isOutofWall(currentPiece, 1))
+//			if(!isOutofWall(current_tetromino.getPiecePosition(), 1))
+//				x_coor++;
+//		}
+//		else if(keyPressed(KeyEvent.VK_UP)){
+//			rotate = true;
+///*			if(!isOutofWall(rotation(currentPiece), 0))
+//				currentPiece = rotation(currentPiece);
+//*/
+//			if(!isOutofWall(rotation(current_tetromino.getPiecePosition()), 0))
+//				current_tetromino.setPiecePosition(rotation(current_tetromino.getPiecePosition()));
+//
+//
+//			System.out.println();
+//			rotate = false;
+//		}
+//
+//
+//	}
 
-		if(keyPressed(KeyEvent.VK_LEFT)){
-			if(!isOutofWall(currentPiece, -1))
-				x_coor--;
-		}
-		else if(keyPressed(KeyEvent.VK_RIGHT)){
-			if(!isOutofWall(currentPiece, 1))
-				x_coor++;
-		}
-		else if(keyPressed(KeyEvent.VK_UP)){
-			rotate = true;
-			if(!isOutofWall(rotation(currentPiece), 0))
-				currentPiece = rotation(currentPiece);
-			System.out.println();
-			rotate = false;
-		}
-
-
+	
+	private void movePiece(int move) {
+		if(!isOutofWall(current_tetromino.getPiecePosition(), move))				
+			x_coor += move;
 	}
-
+	
 	private void readInput() {
-		if(keyPressed(KeyEvent.VK_SPACE)){
+		if(keyPressed(KeyEvent.VK_ENTER)){
 			if(pause){
 				System.out.println("resume");
 				pause = false;
 			}
 			else {
 				System.out.println("pause");
-				printPieceCoordinate();
+//				printPieceCoordinate();
 				pause = true;
 			}
+		}		
+		else if(keyPressed(KeyEvent.VK_LEFT)){
+			movePiece(-1);
 		}
+		else if(keyPressed(KeyEvent.VK_RIGHT)){
+			movePiece(1);
+		}
+		else if(keyPressed(KeyEvent.VK_UP)){
+			rotate = true;
+			if(!isOutofWall(rotation(current_tetromino.getPiecePosition()), 0))
+				current_tetromino.setPiecePosition(rotation(current_tetromino.getPiecePosition()));
+
+			System.out.println();
+			rotate = false;
+		}
+/*		
+		//fix
+		else if(keyPressed(KeyEvent.VK_SPACE)){
+			if(!isOutofWall(rotation(current_tetromino.getPiecePosition()), 0))
+				level++;
+			
+		}
+*/
+		else if(keyPressed(KeyEvent.VK_CONTROL)){
+			storeSlot_1 = storePiece(storeSlot_1);
+			updateStorePieceList();
+		}
+		else if(keyPressed(KeyEvent.VK_SHIFT)){
+			storeSlot_2 = storePiece(storeSlot_2);				
+			updateStorePieceList();
+		}
+		else if(keyPressed(KeyEvent.VK_CAPS_LOCK)){
+			storeSlot_3 = storePiece(storeSlot_3);
+			updateStorePieceList();			
+		}
+
+		
 	}
 	
 	
@@ -380,7 +460,7 @@ public class GameFrame extends Game {
 			}
 		}
 	}
-
+	
 	private void renderNextPiece(Graphics2D gt, int[][] piece, Color color) {
 		
 		for (int i = 0; i < 5; i++) {
@@ -400,33 +480,105 @@ public class GameFrame extends Game {
 			}
 		}
 	}
+	
+	private void drawStoreSlots(Graphics2D gt) {
+		
+		int y = SLOT_Y;
+		
+		for (int n = 0; n < 3; n++) {
+			gt.drawRect(SLOT_X, y, SLOT_SIZE * SLOT_LENGTH, SLOT_SIZE * SLOT_LENGTH);							
+
+//			for (int i = 0; i < SLOT_LENGTH; i++) {
+//				for (int j = 0; j < SLOT_LENGTH; j++) {
+//					gt.drawRect(SLOT_X + i * SLOT_SIZE, y + j * SLOT_SIZE, SLOT_SIZE, SLOT_SIZE);							
+//				}
+//			}
+
+			y += (SLOT_LENGTH + 2) * SLOT_SIZE;
+		}
+
+	}
+	
+	
+	private void renderStoredPieces(Graphics2D gt) {
+		int y = SLOT_Y;
+		y = SLOT_Y + ((SLOT_LENGTH + 2) * SLOT_SIZE) * 2 ;
+		
+		for (Tetromino p: storedPiecess) {
+			if(p != null){
+			int[][] piece = p.getPiecePosition();
+			for (int i = 0; i < piece.length; i++) {
+				for (int j = 0; j < piece[i].length; j++) {
+					if(piece[i][j] == 1 || piece[i][j] == 2){
+						gt.setColor(p.getColor());
+						gt.fillRect(SLOT_X + i * SLOT_SIZE, y + j * SLOT_SIZE, SLOT_SIZE, SLOT_SIZE);		
+						gt.setColor(Color.black);						
+						gt.drawRect(SLOT_X + i * SLOT_SIZE, y + j * SLOT_SIZE, SLOT_SIZE, SLOT_SIZE);		
+					}
+				}
+			}
+//			y += (SLOT_LENGTH + 2) * SLOT_SIZE;
+			y -= (SLOT_LENGTH + 2) * SLOT_SIZE;
+			}
+		}
+	}
 
 	private void printMainScreen(Graphics2D gt) {
 		tetris.drawString(gt, "TETRIS", 20, 440);
-
-
+	}
+	
+	private void printGameOverScreen(Graphics2D gt) {
+		tetris.drawString(gt, "GAME OVER", 10, 440);
 
 	}
-
-	public void render(Graphics2D gt) {
-		if(mainScreen)
-			printMainScreen(gt);
-
-		gt.setColor(Color.white);
-		gt.fillRect(0, 0, getWidth(), getHeight());
-
-		gt.setColor(Color.black);
+	
+	private Tetromino storePiece(Tetromino storeSlot) {
+		Tetromino store;
+		if(storeSlot != null){
+			store = current_tetromino;
+			current_tetromino = storeSlot;
+		}
+		else{
+			store = current_tetromino;
+			generateNewPiece();
+		}
+			
+		return store;
+	}
+	
+	private void updateStorePieceList() {
+		storedPiecess = new ArrayList<Tetromino>();
+		storedPiecess.add(storeSlot_1);
+		storedPiecess.add(storeSlot_2);
+		storedPiecess.add(storeSlot_3);
+	}
+	
+	private Color setBlockColor(int color) {
+		Color c;
 		
-		//Draw Grid
-
-		//Draw outer wall
-//		gt.drawRect(x_padding * CELL_SIZE, y_padding * CELL_SIZE, COL_SIZE * CELL_SIZE, ROW_SIZE * CELL_SIZE);
+		switch (color) {
+		case 2: c = Color.yellow; break;
+		case 3: c = Color.cyan; break;
+		case 4: c = Color.orange; break;
+		case 5: c = Color.blue; break;
+		case 6: c = new Color(220, 20, 60); break;
+		case 7: c = Color.green; break;
+		case 8: c = new Color(158, 0, 240); break;
+		default: c = Color.gray;
+		}
 		
+		return c;
+	}
+	
+
+	private void renderGameField(Graphics2D gt) {
+		//Draw Grid		
+
 		for (int i = 0; i < gameField.length; i++) {
 			for (int j = 0; j < gameField[i].length; j++) {
-				if(gameField[i][j] == 1){
-					gt.setColor(Color.red);
-//					gt.fillRect(i*CELL_SIZE + x, j*CELL_SIZE + y, CELL_SIZE, CELL_SIZE);				
+				if(gameField[i][j] > 0){
+//					gt.setColor(Color.red);
+					gt.setColor(setBlockColor(gameField[i][j]));
 					gt.fillRect((i + x_padding) *CELL_SIZE, (j + y_padding)*CELL_SIZE, CELL_SIZE, CELL_SIZE);				
 					gt.setColor(Color.black);
 					gt.drawRect((i + x_padding) *CELL_SIZE, (j + y_padding)*CELL_SIZE, CELL_SIZE, CELL_SIZE);				
@@ -436,6 +588,22 @@ public class GameFrame extends Game {
 				gt.drawRect((i + x_padding) *CELL_SIZE, (j + y_padding)*CELL_SIZE, CELL_SIZE, CELL_SIZE);				
 			}
 		}
+
+	}
+	
+	public void render(Graphics2D gt) {
+		if(mainScreen)
+			printMainScreen(gt);
+
+		gt.setColor(Color.white);
+		gt.fillRect(0, 0, getWidth(), getHeight());
+
+		gt.setColor(Color.black);
+		
+		//Draw outer wall
+//		gt.drawRect(x_padding * CELL_SIZE, y_padding * CELL_SIZE, COL_SIZE * CELL_SIZE, ROW_SIZE * CELL_SIZE);
+
+		renderGameField(gt);
 		
 		// Display next piece
 
@@ -447,48 +615,33 @@ public class GameFrame extends Game {
 //			}
 //		}
 
-		renderNextPiece(gt, nextPiece, nextPieceColor);
+
 		
-		
-//		renderPiece(gt, o, O);
+/*		renderNextPiece(gt, nextPiece, nextPieceColor);
 		renderPiece(gt, currentPiece, currentPieceColor);
-
-
+*/
+		renderNextPiece(gt, next_tetromino.getPiecePosition(), next_tetromino.getColor());
+		renderPiece(gt, current_tetromino.getPiecePosition(), current_tetromino.getColor());
+		
 		//		gt.drawRect(x, y, COL_SIZE * CELL_SIZE, ROW_SIZE*CELL_SIZE);
 		
-		if(extremeMode)
+		if(extremeMode){
 			drawStoreSlots(gt);
-
-
-	}
-	
-	private void drawStoreSlots(Graphics2D gt) {
-	
-		int y = SLOT_Y;
-		
-		for (int n = 0; n < 3; n++) {
-//			gt.drawRect(SLOT_X, y, SLOT_SIZE * SLOT_LENGTH, SLOT_SIZE * SLOT_LENGTH);							
-
-			for (int i = 0; i < SLOT_LENGTH; i++) {
-				for (int j = 0; j < SLOT_LENGTH; j++) {
-					gt.drawRect(SLOT_X + i * SLOT_SIZE, y + j * SLOT_SIZE, SLOT_SIZE, SLOT_SIZE);							
-				}
-			}
-
-			y += (SLOT_LENGTH + 2) * SLOT_SIZE;
+			renderStoredPieces(gt);
 		}
+//		if(over)
+//			printGameOverScreen(gt);
+
 
 	}
 	
 	
-	private void renderStoredPieces(Graphics2D gt) {
-		
-	}
+
 	
 	// checks if the piece is still inside the game field
 	private boolean isOutofWall(int[][] piece, int move) {
 //		System.out.println("out of wall func");
-		boolean wall = false;
+//		boolean wall = false;
 	
 		// loop though the piece array
 		for (int i = 0; i < piece.length; i++) {
@@ -501,7 +654,7 @@ public class GameFrame extends Game {
 					// if piece is inside field
 					if(isInsideGrid(i, j, move)){
 						// if check will hit an existing piece
-						if(gameField[x_coor + i + move - x_padding][level + j + 1 - y_padding] == 1){
+						if(gameField[x_coor + i + move - x_padding][level + j + 1 - y_padding] >= 1){
 							// then the move is not allowed
 //							System.out.println("out of bounds");
 //							wall = true; 
@@ -524,9 +677,41 @@ public class GameFrame extends Game {
 	
 	private void gameOver() {
 		over = true;
+		System.out.println("Game over");
 	}
 
+	
+	private Tetromino newPiece() {
+		Tetromino piece = new o_shape();
+
+		int rand = ((int)(Math.random() * 7)) ;
+		switch (rand) {
+		case 0: piece = new o_shape(); break;
+		case 1: piece = new i_shape(); break;
+		case 2: piece = new l_left_shape();break;
+		case 3: piece = new l_right_shape(); break;
+		case 4: piece = new n_left_shape(); break;
+		case 5: piece = new n_right_shape(); break;
+		case 6: piece = new t_shape(); break;
+		}
+
+		return piece;	
+	}
+	
+	private void resetValuesForNewPiece() {
+		// reinitialize values
+		level = level_default;
+		x_coor = x_coord_default;
+		pieceLanded = false;
+	}
+	
 	private void generateNewPiece() {
+		current_tetromino = next_tetromino;
+		next_tetromino = newPiece(); 
+		resetValuesForNewPiece();
+	}
+	
+/*	private void generateNewPiece() {
 
 		//generate new piece
 		currentPieceColor = nextPieceColor;
@@ -553,19 +738,27 @@ public class GameFrame extends Game {
 
 	}
 	
+*/	
 	public void update(long l) {
 		
-		movePiece();
+//		movePiece();
 		readInput();
 		//lineFull();
 		if(!pause && !over){
 			if(timer.action(l)){
-				checkPieceCollision(currentPiece);
+//				checkPieceCollision(currentPiece);
+				checkPieceCollision(current_tetromino.getPiecePosition());
 				if(pieceLanded){
-					
-					addPieceToGameField();
+
+/*					addPieceToGameField();
+					generateNewPiece();
+*/					
+					// using tetromino class
+					addPieceToGameField(current_tetromino.getPiecePosition(), current_tetromino.getColor_index());
 					lineFull();
 					generateNewPiece();
+//					printGameField();
+				
 				}
 				else{
 					//if(!temp)
