@@ -501,9 +501,9 @@ public class GameFrame extends Game {
 					if(!findGhost){
 						xGhost = x_coor;
 						yGhost = j;
-						System.out.println("finding");
+						//System.out.println("finding");
 						findGhostPosition(piece);
-						System.out.println("find");
+						//System.out.println("find");
 					}
 					
 
