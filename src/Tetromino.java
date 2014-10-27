@@ -63,10 +63,10 @@ class o_shape extends Tetromino{
 class i_shape extends Tetromino{
 
 	static int[][] i =   
-		   {{0, 0, 0, 0, 0},
-		    {0, 0, 0, 0, 0},
-		    {0, 1, 2, 1, 1},
-		    {0, 0, 0, 0, 0},
+		   {{0, 0, 1, 0, 0},
+		    {0, 0, 1, 0, 0},
+		    {0, 0, 2, 0, 0},
+		    {0, 0, 1, 0, 0},
 		    {0, 0, 0, 0, 0}};
 		
 	public i_shape(){
@@ -77,11 +77,11 @@ class i_shape extends Tetromino{
 
 class l_left_shape extends Tetromino{
 
-	static int[][] l_left =  
-		{{0, 0, 0, 0, 0},
-		{0, 0, 1, 0, 0},
+	static int[][] l_left =  {
+		{0, 0, 0, 0, 0},
+		{0, 1, 1, 0, 0},
 		{0, 0, 2, 0, 0},
-		{0, 0, 1, 1, 0},
+		{0, 0, 1, 0, 0},
 		{0, 0, 0, 0, 0}};
 
 	public l_left_shape(){
@@ -92,11 +92,11 @@ class l_left_shape extends Tetromino{
 
 class l_right_shape extends Tetromino{
 
-	static int[][] l_right = 
-		{{0, 0, 0, 0, 0},
-		{0, 0, 1, 0, 0},
+	static int[][] l_right = {
+		{0, 0, 0, 0, 0},
+		{0, 0, 1, 1, 0},
 		{0, 0, 2, 0, 0},
-		{0, 1, 1, 0, 0},
+		{0, 0, 1, 0, 0},
 		{0, 0, 0, 0, 0}};
 
 	public l_right_shape(){
@@ -149,3 +149,34 @@ class t_shape extends Tetromino{
 	}
 	
 }
+
+class oo_shape extends Tetromino{
+
+	static	int[][] oo =
+		{{0, 0, 0, 0, 0},
+	    {0, 1, 2, 1, 0},
+	    {0, 1, 1, 1, 0},
+	    {0, 0, 0, 0, 0},
+	    {0, 0, 0, 0, 0}};
+	
+	public oo_shape(){
+		super(Color.gray, 5, oo, 7);		
+	}
+	
+}
+
+class p_shape extends Tetromino{
+
+	static	int[][] p ={
+		{0, 0, 1, 1, 0},
+	    {0, 0, 0, 1, 0},
+	    {0, 0, 1, 1, 0},
+	    {0, 0, 1, 0, 0},
+	    {0, 0, 0, 0, 0}};
+	
+	public p_shape(){
+		super(Color.pink, 5, p, 8);		
+	}
+	
+}
+	
