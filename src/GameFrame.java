@@ -418,6 +418,9 @@ public class GameFrame extends Game {
 			System.out.println();
 			rotate = false;
 		}
+		else if (keyPressed(KeyEvent.VK_DOWN)){
+			level = yGhost + 1;
+		}
 		/*		
 		//fix
 		else if(keyPressed(KeyEvent.VK_SPACE)){
@@ -441,8 +444,7 @@ public class GameFrame extends Game {
 
 
 	}
-
-
+	
 	private void renderPiece(Graphics2D gt, int[][] piece, Color color) {
 
 		for (int i = 0; i < 5; i++) {
@@ -468,19 +470,24 @@ public class GameFrame extends Game {
 			for (int j = 0; j < piece[i].length; j++) {
 				if(piece[i][j] == 1 || piece[i][j] == 2){
 
-					//if( isInsideGrid(i, j) && xGhost+ i - x_padding >= 0 && yGhost + j + 1 - y_padding >= 0){
+					if( isInsideGrid(i, j) && xGhost+ i - x_padding >= 0 && yGhost + j + 1 - y_padding >= 0){
 						int xtemp  = xGhost + i - x_padding;
 						int ytemp = yGhost + j + 1 - y_padding;
 						System.out.println("Ghost Field: " + xtemp + " " + ytemp + " Ghost: " + xGhost + " " + yGhost);
-						
+					
 						if(gameField[xGhost + i - x_padding][yGhost + j + 1 - y_padding] == 0){
 							temp++;
 
 
 
-						//}
+						}	if(((j + yGhost + 1) > y_padding + ROW_SIZE -1)){
+					findGhost = true;
+					break;
+						}
 
-					}
+						
+
+				} 
 
 				}
 			}
@@ -492,11 +499,21 @@ public class GameFrame extends Game {
 
 
 	}
+	private boolean blockBetween(int x, int y){
+		boolean between = false;
+		for (int i = x; i < 10; i++) {
+			for (int j = y; j>=0 ; j--) {
+				
+			}
+			
+		}
+		return between;
+	}
 
 	private void renderGhostPiece(Graphics2D gt,  int[][] piece){
 
 		//for (int i = x_coor; i < 10; i++) {
-			for (int j = 15; j >= 0; j--) {
+			for (int j = ROW_SIZE-1; j >= 0; j--) {
 				
 					if(!findGhost){
 						xGhost = x_coor;
@@ -514,10 +531,10 @@ public class GameFrame extends Game {
 				if(piece[a][b] == 1 || piece[a][b] == 2){
 
 					gt.setColor(Color.LIGHT_GRAY);
-					gt.fillRect((a+xGhost)*width, (b + yGhost+1)*width, width, width);					
+					gt.fillRect((a+xGhost)*width, (b + yGhost + 1)*width, width, width);					
 
 					gt.setColor(Color.BLACK);
-					gt.drawRect((a+xGhost)*width, (b + yGhost+1)*width, width, width);
+					gt.drawRect((a+xGhost)*width, (b + yGhost + 1)*width, width, width);
 					//System.out.println(xGhost +" "  + yGhost);
 
 					
@@ -688,9 +705,9 @@ public class GameFrame extends Game {
 		renderPiece(gt, currentPiece, currentPieceColor);
 		 */
 		renderNextPiece(gt, next_tetromino.getPiecePosition(), next_tetromino.getColor());
-		renderPiece(gt, current_tetromino.getPiecePosition(), current_tetromino.getColor());
+	
 		renderGhostPiece(gt, current_tetromino.getPiecePosition());
-
+	renderPiece(gt, current_tetromino.getPiecePosition(), current_tetromino.getColor());
 		//		gt.drawRect(x, y, COL_SIZE * CELL_SIZE, ROW_SIZE*CELL_SIZE);
 
 		if(extremeMode){
