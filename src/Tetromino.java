@@ -154,8 +154,8 @@ class oo_shape extends Tetromino{
 
 	static	int[][] oo =
 		{{0, 0, 0, 0, 0},
-	    {0, 1, 2, 1, 0},
 	    {0, 1, 1, 1, 0},
+	    {0, 1, 2, 1, 0},
 	    {0, 0, 0, 0, 0},
 	    {0, 0, 0, 0, 0}};
 	
@@ -167,10 +167,10 @@ class oo_shape extends Tetromino{
 
 class p_shape extends Tetromino{
 
-	static	int[][] p ={
-		{0, 0, 1, 1, 0},
+	static	int[][] p =
+		{{0, 0, 1, 1, 0},
 	    {0, 0, 0, 1, 0},
-	    {0, 0, 1, 1, 0},
+	    {0, 0, 2, 1, 0},
 	    {0, 0, 1, 0, 0},
 	    {0, 0, 0, 0, 0}};
 	
